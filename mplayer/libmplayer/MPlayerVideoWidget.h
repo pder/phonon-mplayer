@@ -31,6 +31,22 @@ namespace Phonon
 namespace MPlayer
 {
 
+class MPlayerLayer : public WidgetNoPaintEvent {
+	Q_OBJECT
+public:
+	MPlayerLayer(QWidget * parent);
+	~MPlayerLayer();
+
+	void playingStarted();
+	void playingStopped();
+
+protected:
+	virtual void paintEvent(QPaintEvent *e);
+
+private:
+	bool playing;
+};
+
 /**
  * Widget where to show the MPlayer video.
  *
@@ -52,13 +68,14 @@ public:
 
 	QSize sizeHint() const;
 
+	MPlayerLayer * _videoLayer;
+
 private:
 
 	void updateVideoWindow() const;
 
 	void resizeEvent(QResizeEvent * event);
 
-	WidgetNoPaintEvent * _videoLayer;
 
 	double _aspectRatio;
 

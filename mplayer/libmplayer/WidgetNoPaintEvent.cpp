@@ -21,6 +21,7 @@
 #include "LibMPlayerLogger.h"
 
 #include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
 
 namespace Phonon
 {
@@ -30,11 +31,9 @@ namespace MPlayer
 WidgetNoPaintEvent::WidgetNoPaintEvent(QWidget * parent)
 	: QWidget(parent) {
 
-	//When resizing fill with black (backgroundRole color) the rest is done by paintEvent
-	setAttribute(Qt::WA_OpaquePaintEvent);
-
 	//Disable Qt composition management as MPlayer draws onto the widget directly
 	setAttribute(Qt::WA_PaintOnScreen);
+	setAttribute(Qt::WA_PaintUnclipped);
 
 	//Indicates that the widget has no background, i.e. when the widget receives paint events,
 	//the background is not automatically repainted
@@ -47,13 +46,12 @@ WidgetNoPaintEvent::WidgetNoPaintEvent(QWidget * parent)
 	setFocusPolicy(Qt::NoFocus);
 }
 
-void WidgetNoPaintEvent::paintEvent(QPaintEvent * event) {
-	Q_UNUSED(event);
+void WidgetNoPaintEvent::paintEvent(QPaintEvent *e) {
 
 	//FIXME this makes the video flicker
 	//Makes everything backgroundRole color
 	QPainter painter(this);
-	painter.eraseRect(rect());
+	painter.eraseRect(e->rect());
 }
 
 void WidgetNoPaintEvent::setBackgroundColor(const QColor & color) {

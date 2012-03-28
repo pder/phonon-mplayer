@@ -31,7 +31,7 @@ namespace MPlayer
 MPlayerVideoWidget::MPlayerVideoWidget(QWidget * parent)
 	: WidgetNoPaintEvent(parent) {
 
-	_videoLayer = new WidgetNoPaintEvent(this);
+	_videoLayer = new MPlayerLayer(this);
 
 	//Background color is black
 	setBackgroundColor(Qt::black);
@@ -112,6 +112,34 @@ void MPlayerVideoWidget::setVideoSize(const QSize & videoSize) {
 
 QSize MPlayerVideoWidget::sizeHint() const {
 	return _videoSize;
+}
+
+MPlayerLayer::MPlayerLayer(QWidget *parent)
+	: WidgetNoPaintEvent(parent) {
+	playing = false;
+}
+
+MPlayerLayer::~MPlayerLayer()
+{
+}
+
+void MPlayerLayer::paintEvent(QPaintEvent *e)
+{
+	if (!playing) {
+		WidgetNoPaintEvent::paintEvent(e);
+	}
+}
+
+void MPlayerLayer::playingStarted()
+{
+	repaint();
+	playing = true;
+}
+
+void MPlayerLayer::playingStopped()
+{
+	playing = false;
+	repaint();
 }
 
 }}	//Namespace Phonon::MPlayer

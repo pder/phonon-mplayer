@@ -22,6 +22,7 @@
 #include "SinkNode.h"
 
 #include <phonon/videowidgetinterface.h>
+#include <phonon/phononnamespace.h>
 
 namespace Phonon
 {
@@ -72,6 +73,7 @@ private slots:
 	 * @see MPlayerProcess::videoWidgetSizeChanged()
 	 */
 	void videoWidgetSizeChanged(int width, int height);
+	void stateChanged(Phonon::State newState, Phonon::State oldState);
 
 private:
 

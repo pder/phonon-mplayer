@@ -29,6 +29,7 @@
 #include <QtGui/QDesktopWidget>
 
 #include <QtCore/QtDebug>
+#include <phonon/phononnamespace.h>
 
 namespace Phonon
 {
@@ -58,6 +59,8 @@ void VideoWidget::connectToMediaObject(MediaObject * mediaObject) {
 	MPlayerProcess * process = _mediaObject->getMPlayerProcess();
 	connect(process, SIGNAL(videoWidgetSizeChanged(int, int)),
 		SLOT(videoWidgetSizeChanged(int, int)));
+	connect(process, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+		SLOT(stateChanged(Phonon::State, Phonon::State)));
 
 	_mediaObject->setVideoWidgetId(_videoWidget->winId());
 }
@@ -203,6 +206,14 @@ void VideoWidget::videoWidgetSizeChanged(int width, int height) {
 		parent->setMinimumSize(previousSize);
 	}
 #endif	//Q_WS_WIN
+}
+
+void VideoWidget::stateChanged(Phonon::State newState, Phonon::State oldState)
+{
+    if (newState == Phonon::PlayingState)
+        _videoWidget->_videoLayer->playingStarted();
+    else if (newState == Phonon::StoppedState)
+        _videoWidget->_videoLayer->playingStopped();
 }
 
 }}	//Namespace Phonon::MPlayer

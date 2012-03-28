@@ -49,9 +49,8 @@ public:
 	 */
 	void setBackgroundColor(const QColor & color);
 
-private:
-
-	void paintEvent(QPaintEvent * event);
+protected:
+	virtual void paintEvent(QPaintEvent *e);
 };
 
 }}	//Namespace Phonon::MPlayer
